@@ -1,4 +1,3 @@
-// state/weatherSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getURL } from "../api";
 

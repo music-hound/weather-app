@@ -3,16 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from '../state/store';
 import { toggleTheme } from "../state/themeSlice";
 import { fetchWeather } from "../state/weatherSlice";
+import { cityChange } from "../state/citySlice";
 
 const WeatherComponent = () => {
 
   const { data, loading, error } = useSelector((state: RootState) => state.weather);
   const isLight = useSelector((state : RootState) => state.theme.isLight);
+  const city = useSelector((state : RootState) => state.city.name);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(fetchWeather("ufa"));
-  }, [dispatch]);
+    dispatch(fetchWeather(city));
+  }, [dispatch, city]);
 
 
 
@@ -28,8 +30,8 @@ const WeatherComponent = () => {
       display:'flex',
       flexDirection:'column',
     }}>
-      <button onClick={() => dispatch(toggleTheme())}>
-        {isLight ? "Светлая тема" : "Тёмная тема"}
+      <button onClick={() => dispatch(cityChange("moscow"))}>
+        Поменять город на Москву
       </button>
       <div>
         <img 
@@ -47,6 +49,9 @@ const WeatherComponent = () => {
         <p><strong>Снег за последний час:</strong> {data.snow?.["1h"] || 0} мм</p>
         <p><strong>Описание:</strong> {data.weather[0].description}</p>
       </div>
+      <button onClick={() => dispatch(toggleTheme())}>
+        {isLight ? "Светлая тема" : "Тёмная тема"}
+      </button>
     </div>
   );
 };
