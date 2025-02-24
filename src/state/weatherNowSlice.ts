@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getURL } from "../api";
 
-interface Weather {
+interface WeatherNow {
     coord: {
       lon: string;
       lat: string;
@@ -48,10 +47,12 @@ interface Weather {
 
 // Создаём thunk для получения данных о погоде
 export const fetchWeather = createAsyncThunk(
-  "weather/fetchWeather", 
+  "weatherNow/fetchWeatherNow", 
   async (city: string, { rejectWithValue }) => {
     try {
-      const response = await fetch(getURL("weather", city));
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${import.meta.env.VITE_API_KEY}&units=metric&lang=ru`
+      );
       if (!response.ok) {
         throw new Error("Ошибка сети");
       }
@@ -68,21 +69,21 @@ export const fetchWeather = createAsyncThunk(
 );
 
 // Начальное состояние
-interface WeatherState {
-  data: Weather | null;
+interface WeatherNowState {
+  data: WeatherNow | null;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: WeatherState = {
+const initialState: WeatherNowState = {
   data: null,
   loading: false,
   error: null,
 };
 
 // Создаём slice для погодных данных
-const weatherSlice = createSlice({
-  name: "weather",
+const weatherNowSlice = createSlice({
+  name: "weatherNow",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -103,4 +104,4 @@ const weatherSlice = createSlice({
 });
 
 // Экспорт редьюсера
-export default weatherSlice.reducer;
+export default weatherNowSlice.reducer;
