@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getURL } from "../api";
 
 interface WeatherNow {
     coord: {
@@ -51,7 +50,7 @@ export const fetchWeather = createAsyncThunk(
   "weather/fetchWeather", 
   async (city: string, { rejectWithValue }) => {
     try {
-      const response = await fetch(getURL("weather", city));
+      const response = await fetch(`${city}`);
       if (!response.ok) {
         throw new Error("Ошибка сети");
       }
